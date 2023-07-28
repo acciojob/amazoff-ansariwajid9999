@@ -80,10 +80,14 @@ public class Repository {
     }
     public Integer getOrdersLeftAfterGivenTimeByPartnerId(String time,String partnerId){
         List<Order> currDelPartnerOrder=OrderPartnerPair.getOrDefault(partnerId,new ArrayList<>());
-        int currTime=Integer.parseInt(time);
+        Integer HH=Integer.parseInt(time.substring(0,2));
+        Integer MM=Integer.parseInt((time.substring(3)));
+
+        Integer limitTime=HH*60+MM;
+
         Integer count=0;
         for(Order currOrder : currDelPartnerOrder){
-            if(currTime > currOrder.getDeliveryTime()){
+            if(currOrder.getDeliveryTime() > limitTime){
                 count++;
             }
         }
@@ -96,7 +100,6 @@ public class Repository {
         for(Order currOrder : currDelPartnerOrder){
             time.add(currOrder.getDeliveryTime());
         }
-        Collections.sort(time);
         Integer lastDeliveryTime=time.get(time.size()-1);
         String lastDelivery=String.valueOf(lastDeliveryTime);
         return lastDelivery;
